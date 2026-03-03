@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>PyBank - Dashboard</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🏦</text></svg>">
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #ffffff;
+            color: #1d1d1f;
+            min-height: 100vh;
+            padding: 40px 16px;
+        }
+
+        .container {
+            max-width: 480px;
+            margin: 0 auto;
+        }
+
+        /* ── Header ── */
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 32px;
+        }
+
+        .header h1 {
+            font-size: 24px;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+        }
+
+        .header h1 span { color: #007aff; }
+
+        .logout {
+            font-size: 14px;
+            font-weight: 500;
+            color: #007aff;
+            text-decoration: none;
+            padding: 8px 16px;
+            border: 1.5px solid #007aff;
+            border-radius: 20px;
+            transition: all 0.2s;
+        }
+
+        .logout:hover {
+            background: #007aff;
+            color: white;
+        }
+
+        /* ── Balance Card ── */
+        .balance-card {
+            background: #007aff;
+            border-radius: 24px;
+            padding: 36px;
+            text-align: center;
+            margin-bottom: 20px;
+            color: white;
+        }
+
+        .balance-card .label {
+            font-size: 13px;
+            font-weight: 500;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            opacity: 0.8;
+            margin-bottom: 10px;
+        }
+
+        .balance-card .amount {
+            font-size: 52px;
+            font-weight: 700;
+            letter-spacing: -2px;
+        }
+
+        .balance-card .welcome {
+            font-size: 14px;
+            opacity: 0.75;
+            margin-top: 10px;
+            font-weight: 300;
+        }
+
+        /* ── Cards ── */
+        .card {
+            background: #f5f5f7;
+            border-radius: 20px;
+            padding: 24px;
+            margin-bottom: 16px;
+        }
+
+        .card h2 {
+            font-size: 17px;
+            font-weight: 600;
+            color: #1d1d1f;
+            margin-bottom: 16px;
+        }
+
+        /* ── Inputs ── */
+        input {
+            width: 100%;
+            padding: 13px 16px;
+            margin-bottom: 12px;
+            background: white;
+            border: 1.5px solid #e0e0e5;
+            border-radius: 12px;
+            font-size: 15px;
+            color: #1d1d1f;
+            font-family: 'Inter', sans-serif;
+            transition: border-color 0.2s;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: #007aff;
+        }
+
+        input::placeholder { color: #aeaeb2; }
+
+        /* ── Buttons ── */
+        button {
+            width: 100%;
+            padding: 13px;
+            border: none;
+            border-radius: 12px;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            font-family: 'Inter', sans-serif;
+            transition: opacity 0.2s, transform 0.1s;
+        }
+
+        button:hover  { opacity: 0.85; }
+        button:active { transform: scale(0.98); }
+
+        .btn-deposit  { background: #007aff; color: white; }
+        .btn-withdraw { background: #1d1d1f; color: white; }
+
+        /* ── Transaction History ── */
+        .history-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 0;
+            border-bottom: 1px solid #e0e0e5;
+            font-size: 14px;
+            color: #1d1d1f;
+        }
+
+        .history-item:last-child { border-bottom: none; }
+
+        .history-item .dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #007aff;
+            margin-right: 12px;
+            flex-shrink: 0;
+        }
+
+        .history-item .text { flex: 1; }
+
+        .no-history {
+            font-size: 14px;
+            color: #aeaeb2;
+            text-align: center;
+            padding: 12px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+
+        <!-- Header -->
+        <div class="header">
+            <h1>Py<span>Bank</span></h1>
+            <a href="/logout" class="logout">Log Out</a>
+        </div>
+
+        <!-- Balance Card -->
+        <div class="balance-card">
+            <div class="label">Current Balance</div>
+            <div class="amount">${{ "%.2f" | format(balance) }}</div>
+            <div class="welcome">Welcome back, {{ username }} 👋</div>
+        </div>
+
+        <!-- Deposit -->
+        <div class="card">
+            <h2>Deposit</h2>
+            <form action="/deposit" method="POST">
+                <input type="number" name="amount" placeholder="Enter amount to deposit" step="0.01" min="0.01" required>
+                <button class="btn-deposit" type="submit">Deposit →</button>
+            </form>
+        </div>
+
+        <!-- Withdraw -->
+        <div class="card">
+            <h2>Withdraw</h2>
+            <form action="/withdraw" method="POST">
+                <input type="number" name="amount" placeholder="Enter amount to withdraw" step="0.01" min="0.01" required>
+                <button class="btn-withdraw" type="submit">Withdraw →</button>
+            </form>
+        </div>
+
+        <!-- Transaction History -->
+        <div class="card">
+            <h2>Transaction History</h2>
+            {% if history %}
+                {% for transaction in history %}
+                    <div class="history-item">
+                        <div class="dot"></div>
+                        <div class="text">{{ transaction }}</div>
+                    </div>
+                {% endfor %}
+            {% else %}
+                <div class="no-history">No transactions yet.</div>
+            {% endif %}
+        </div>
+
+    </div>
+</body>
+</html>
